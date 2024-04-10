@@ -18,7 +18,7 @@ class Api::CoursesController < ApplicationController
         render json: {
             title:  course.title,
             description: course.description,
-            fio_of_teacher: User.find(course.user_id).fio,
+            fio: User.find(course.user_id).fio,
             number_of_students: Course.sum_students(params[:id])
         }, status: :ok
         
@@ -45,9 +45,10 @@ class Api::CoursesController < ApplicationController
         @course = Course.new(:title => course_params[:title], :description => course_params[:description], :user => @user)
         @course.save
         render json: {
-            fio_of_teacher: @user.fio,
-            name_of_course: @course.title,
-            description_of_course: @course.description
+            "id": @course.id,
+            "title": @course.title,
+            "description": @course.description,
+            "fio": @user.fio
         }, status: :ok
     end
 
@@ -56,13 +57,13 @@ class Api::CoursesController < ApplicationController
         pagin_offset = (filters[:pagination][:page] - 1) * filters[:pagination][:limit]
 
         if (filters[:id_stud] != 0) and (filters[:id_teach] != 0)
-            courses = Course.where(user_id: filters[:id_teach]).joins(:participants).where("participants.user_id" => filters[:id_stud]).offset(pagin_offset).take(filters[:pagination][:limit])
+            courses = Course.select("users.fio, courses.title, courses.description, courses.id").where(user_id: filters[:id_teach]).joins(:participants).where("participants.user_id" => filters[:id_stud]).joins(:user).offset(pagin_offset).take(filters[:pagination][:limit])
         elsif (filters[:id_stud] != 0)
-            courses = Course.joins(:participants).where("participants.user_id" => filters[:id_stud]).offset(pagin_offset).take(filters[:pagination][:limit])
+            courses = Course.select("users.fio, courses.title, courses.description, courses.id").joins(:participants).where("participants.user_id" => filters[:id_stud]).joins(:user).offset(pagin_offset).take(filters[:pagination][:limit])
         elsif (filters[:id_teach] != 0)
             courses = Course.select("users.fio, courses.title, courses.description, courses.id").where(user_id: filters[:id_teach]).joins(:user).offset(pagin_offset).take(filters[:pagination][:limit])
         else
-            courses = Course.offset(pagin_offset).take(filters[:pagination][:limit])
+            courses = Course.select("users.fio, courses.title, courses.description, courses.id").joins(:user).offset(pagin_offset).take(filters[:pagination][:limit])
         end
 
         return courses

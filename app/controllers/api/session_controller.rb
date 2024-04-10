@@ -10,7 +10,7 @@ class Api::SessionController < ApplicationController
         return (render status: :unauthorized) if BCrypt::Password.new(user.password) != user_params[:password]
 
         payload_new = {id: user.id, email: user.email, password: user.password, jwt_validation: user.jwt_validation, created_at: Time.now}
-        token = (JWT.encode payload_new, "SK", "HS256")[0..-2]
+        token = (JWT.encode payload_new, "SK", "HS256")
         return (render status: :unprocessable_entity) if !token
 
         render json: {jwt: token}, status: :ok

@@ -4366,3 +4366,31 @@ Processing by Api::CoursesController#show as */*
 Completed 200 OK in 8ms (Views: 0.2ms | ActiveRecord: 0.4ms | Allocations: 3249)
 
 
+Started POST "/api/session" for 127.0.0.1 at 2024-04-10 13:24:28 +0300
+  [1m[36mActiveRecord::SchemaMigration Load (0.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by Api::SessionController#create as */*
+  Parameters: {"user"=>{"email"=>"stu@gmail.com", "password"=>"[FILTERED]"}, "session"=>{"user"=>{"email"=>"stu@gmail.com", "password"=>"[FILTERED]"}}}
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "stu@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/api/session_controller.rb:8:in `create'
+Completed 200 OK in 263ms (Views: 0.2ms | ActiveRecord: 2.2ms | Allocations: 23945)
+
+
+Started POST "/api/session" for 127.0.0.1 at 2024-04-10 13:25:02 +0300
+Processing by Api::SessionController#create as */*
+  Parameters: {"user"=>{"email"=>"stu@gmail.com", "password"=>"[FILTERED]"}, "session"=>{"user"=>{"email"=>"stu@gmail.com", "password"=>"[FILTERED]"}}}
+  [1m[36mUser Load (0.1ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "stu@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/api/session_controller.rb:8:in `create'
+Completed 200 OK in 196ms (Views: 0.1ms | ActiveRecord: 1.9ms | Allocations: 5579)
+
+
+Started GET "/api/courses" for 127.0.0.1 at 2024-04-10 15:45:55 +0300
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by Api::CoursesController#index as */*
+  Parameters: {"id_teach"=>5, "id_stud"=>0, "pagination"=>{"page"=>1, "limit"=>2}, "course"=>{}}
+  [1m[36mUser Load (0.1ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? AND "users"."jwt_validation" = ? LIMIT ?[0m  [["id", 5], ["jwt_validation", "CouZESiRFZvkfogNZjiMHRrwtXgTbhQi"], ["LIMIT", 1]]
+  ↳ app/controllers/api/courses_controller.rb:104:in `check_auth'
+  [1m[36mCourse Load (1.1ms)[0m  [1m[34mSELECT users.fio, courses.title, courses.description, courses.id FROM "courses" INNER JOIN "users" ON "users"."id" = "courses"."user_id" WHERE "courses"."user_id" = ? LIMIT ? OFFSET ?[0m  [["user_id", 5], ["LIMIT", 2], ["OFFSET", 0]]
+  ↳ app/controllers/api/courses_controller.rb:65:in `get_courses'
+Completed 200 OK in 126ms (Views: 0.4ms | ActiveRecord: 6.3ms | Allocations: 25097)
+
+
