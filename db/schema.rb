@@ -10,9 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_04_04_152818) do
+ActiveRecord::Schema[7.1].define(version: 2024_04_05_231124) do
   create_table "courses", force: :cascade do |t|
-    t.string "title", null: false
+    t.string "title"
     t.text "description"
     t.integer "user_id", null: false
     t.datetime "created_at", null: false
@@ -30,10 +30,10 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_04_152818) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.string "fio", null: false
-    t.string "email", null: false
-    t.string "password", null: false
-    t.boolean "teacher", null: false
+    t.string "fio"
+    t.string "email"
+    t.string "password"
+    t.boolean "teacher"
     t.string "jwt_validation"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
