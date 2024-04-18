@@ -3,7 +3,7 @@ require 'bcrypt'
 
 RSpec.describe Api::SessionController, type: :request do
     
-    let! (:teacher_1) { 
+    let!(:teacher_1) { 
         FactoryBot.create(
             :user, 
             fio: "Techer_1",                  
@@ -14,7 +14,7 @@ RSpec.describe Api::SessionController, type: :request do
         ) 
     }
     
-    let (:teacher_1_token) { 
+    let(:teacher_1_token) { 
         JWT.encode({ 
             id: teacher_1.id,
             email: teacher_1.email,
@@ -26,7 +26,7 @@ RSpec.describe Api::SessionController, type: :request do
         "HS256")
     }
 
-    let! (:teacher_2) { 
+    let!(:teacher_2) { 
         FactoryBot.create(
             :user, 
             fio: "Techer_2",                  
@@ -37,7 +37,7 @@ RSpec.describe Api::SessionController, type: :request do
         ) 
     }
 
-    let (:teacher_2_token) { 
+    let(:teacher_2_token) { 
         JWT.encode({ 
             id: teacher_2.id,
             email: teacher_2.email,
@@ -49,7 +49,7 @@ RSpec.describe Api::SessionController, type: :request do
         "HS256")
     }
 
-    let! (:student_1) { 
+    let!(:student_1) { 
         FactoryBot.create(
             :user, 
             fio: "Student_1",                  
@@ -60,7 +60,7 @@ RSpec.describe Api::SessionController, type: :request do
         ) 
     }
 
-    let (:student_1_token) { 
+    let(:student_1_token) { 
         JWT.encode({ 
             id: student_1.id,
             email: student_1.email,
@@ -72,7 +72,7 @@ RSpec.describe Api::SessionController, type: :request do
         "HS256")
     }
 
-    let! (:student_2) { 
+    let!(:student_2) { 
         FactoryBot.create(
             :user, 
             fio: "Student_2",                  
@@ -83,7 +83,7 @@ RSpec.describe Api::SessionController, type: :request do
         ) 
     }
 
-    let (:student_2_token) { 
+    let(:student_2_token) { 
         JWT.encode({ 
             id: student_2.id,
             email: student_2.email,
@@ -95,7 +95,7 @@ RSpec.describe Api::SessionController, type: :request do
         "HS256")
     }
 
-    let! (:course_1) {
+    let!(:course_1) {
         FactoryBot.create(
             :course,
             title: "1 Курс",

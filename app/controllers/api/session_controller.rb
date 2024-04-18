@@ -30,29 +30,32 @@ class Api::SessionController < ApplicationController
         user = User.find_by(id: decoded_token[0]["id"], jwt_validation: decoded_token[0]["jwt_validation"])
         return (render status: :unprocessable_entity) if !user
 
-        user.jwt_validation = get_random_string(32)
+        user.jwt_validation = random_string(32)
         user.save
         
         render status: :ok
     end
 
-    private def get_random_string(num)
+
+    private
+
+    def random_string(num)
         o = [('a'..'z'), ('A'..'Z')].map(&:to_a).flatten
         return (0...num).map { o[rand(o.length)] }.join
     end
 
 
-    private def user_params
+    def user_params
         params.require(:user).permit(:email, :password)
     end
 
 
-    private def check_params
+    def check_params
         return ((params["user"].include? :email) and (params["user"].include? :password))
     end
 
 
-    private def check_token
+    def check_token
         return request.headers['Authorization']
     end
 end

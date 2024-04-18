@@ -2,8 +2,8 @@ class Api::CoursesController < ApplicationController
     before_action :check_auth
 
     def index
-        filters = get_filters()
-        courses = get_courses(filters)
+        filters = filter_params()
+        courses = find_courses(filters)
         
         return (render status: :unprocessable_entity) if !courses
         
@@ -53,7 +53,9 @@ class Api::CoursesController < ApplicationController
     end
 
     
-    private def get_courses(filters)
+    private
+
+    def find_courses(filters)
         pagin_offset = (filters[:pagination][:page] - 1) * filters[:pagination][:limit]
 
         if (filters[:id_stud] != 0) and (filters[:id_teach] != 0)
@@ -70,27 +72,27 @@ class Api::CoursesController < ApplicationController
     end
 
 
-    private def get_filters
-        return {:id_stud => get_id_stud(), :id_teach => get_id_teach(), :pagination => get_pagination()}
+    def filter_params
+        return {:id_stud => student_id_param(), :id_teach => teacher_id_param(), :pagination => pagination_param()}
     end
 
 
-    private def get_id_stud
+    def student_id_param
         return (params.include? :id_stud) ? params[:id_stud] : 0
     end
 
 
-    private def get_id_teach
+    def teacher_id_param
         return (params.include? :id_teach) ? params[:id_teach] : 0
     end
 
 
-    private def get_pagination
+    def pagination_param
         return (params.include? :pagination) ? {:page => params[:pagination][:page], :limit => params[:pagination][:limit] % 1000} : {:page => 1, :limit => 50}
     end
 
 
-    private def check_auth
+    def check_auth
         return (render status: :unauthorized) if !check_token
 
         token = request.headers['Authorization'][7..-1]
@@ -107,18 +109,17 @@ class Api::CoursesController < ApplicationController
     end
 
 
-    private def check_course_params
+    def check_course_params
         return ((params["course"].include? :title) and (params["course"].include? :description))
     end
 
 
-    private def course_params
+    def course_params
         params.require(:course).permit(:title, :description)
     end
 
 
-    private def check_token
+    def check_token
         return request.headers['Authorization']
     end
-
 end
