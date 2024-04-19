@@ -3,28 +3,9 @@ require 'bcrypt'
 
 RSpec.describe Api::SessionController, type: :request do
     
-    let! (:teacher_1) { 
-        FactoryBot.create(
-            :user, 
-            fio: "Techer_1",                  
-            email: "teacher_1@gmail.com",                 
-            password: BCrypt::Password.create("tea1_1234"),      
-            teacher: true,              
-            jwt_validation: nil
-        ) 
-    }
+    let(:teacher_1) { create(:user, teacher: true) }
 
-    let! (:student_1) { 
-        FactoryBot.create(
-            :user, 
-            fio: "Student_1",                  
-            email: "student_1@gmail.com",                 
-            password: BCrypt::Password.create("stu1_1234"),      
-            teacher: false,              
-            jwt_validation: nil
-        ) 
-    }
-
+    let(:student_1) { create(:user) }
 
     it "POST api/session, DELETE api/session" do
         post "/api/session",
@@ -33,8 +14,8 @@ RSpec.describe Api::SessionController, type: :request do
             },
             params: {
                 user: {
-                    email: "teacher_1@gmail.com",                 
-                    password: "tea1_1234",    
+                    email: teacher_1.email,                 
+                    password: "user1_1234",    
                 }
             }.to_json
         
@@ -57,8 +38,8 @@ RSpec.describe Api::SessionController, type: :request do
             },
             params: {
                 user: {
-                    email: "student_1@gmail.com",                 
-                    password: "stu1_1234",    
+                    email: student_1.email,                 
+                    password: "user2_1234",    
                 }
             }.to_json
         

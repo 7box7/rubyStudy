@@ -102,7 +102,6 @@ module Api
 
     def check_auth
       return (render status: :unauthorized) unless check_token
-
       token = request.headers['Authorization'][7..]
       begin
         decoded_token = JWT.decode token, nil, false
