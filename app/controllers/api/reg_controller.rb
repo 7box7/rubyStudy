@@ -3,14 +3,20 @@
 module Api
   class RegController < ApplicationController
     def create
-      return (render status: 400) unless check_params
-
+      unless check_params
+        render json: { error: 'Bad request' }, status: :bad_request
+        return
+      end
+    
       @user = User.new(fio: user_params[:fio], email: user_params[:email],
                        password: BCrypt::Password.create(user_params[:password]),
                        teacher: user_params[:teacher], jwt_validation: random_string(32))
-      return (render status: :unprocessable_entity) unless @user.save
-
-      render status: :ok
+    
+      if @user.save
+        render json: { message: 'User created successfully' }, status: :created
+      else
+        render json: { errors: @user.errors.full_messages }, status: :unprocessable_entity
+      end
     end
 
 

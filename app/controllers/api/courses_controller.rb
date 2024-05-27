@@ -37,7 +37,7 @@ module Api
     end
 
     def create
-      return (render status: :forbidden) unless @user.teacher
+      return (render json: { error: 'Forbidden' }, status: :forbidden) unless @user.teacher
 
       @course = Course.new(title: course_params[:title], description: course_params[:description],
                            user: @user)
